@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Focus Reader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <a class="support-banner" href="https://x.com/iruletheworldmo" target="_blank" rel="noopener">
+        Enjoying this? Subscribe on X <span>@iruletheworldmo</span> to see more fun projects
+      </a>
+
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Reading Comprehension Trainer</p>
+          <h1>Focus Reader</h1>
+          <p class="subtitle">
+            Paste anything, lock your gaze on the red letter, and let the words flow at
+            your pace.
+          </p>
+        </div>
+        <div class="stats">
+          <div>
+            <p class="stat-label">Words</p>
+            <p class="stat-value" id="wordCount">0</p>
+          </div>
+          <div>
+            <p class="stat-label">Progress</p>
+            <p class="stat-value" id="progress">0%</p>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel reader-panel" id="readerPanel">
+          <div class="reader-toolbar">
+            <div class="reader-label">
+              <span>Focus View</span>
+              <span class="reader-doc" id="readerDoc">No document loaded</span>
+            </div>
+            <div class="toolbar-actions">
+              <button id="customizeBtn" class="ghost">Customize</button>
+              <button id="toggleControlsBtn" class="ghost">Controls</button>
+              <button id="fullscreenBtn" class="ghost">Fullscreen</button>
+            </div>
+          </div>
+
+          <div class="customize-panel closed" id="customizePanel">
+            <div class="customize-group">
+              <p class="customize-title">Focus Letter</p>
+              <label class="toggle">
+                <input id="focusHighlightToggle" type="checkbox" checked />
+                <span>Highlight focus letter</span>
+              </label>
+              <div class="color-row">
+                <input id="focusColorPicker" type="color" value="#ff3b30" aria-label="Focus color" />
+                <button class="color-swatch" data-focus-color="#ff3b30" style="--swatch: #ff3b30;">Red</button>
+                <button class="color-swatch" data-focus-color="#ffffff" style="--swatch: #ffffff;">White</button>
+                <button class="color-swatch" data-focus-color="#36a3ff" style="--swatch: #36a3ff;">Blue</button>
+                <button class="color-swatch" data-focus-color="#32d74b" style="--swatch: #32d74b;">Green</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="reader" aria-live="polite">
+            <div class="gaze-line"></div>
+            <div class="word-display" id="wordDisplay">
+              <span class="word-left"></span>
+              <span class="word-focus"></span>
+              <span class="word-right"></span>
+            </div>
+            <div class="context-view hidden" id="contextView"></div>
+            <div class="context-nav hidden" id="contextNav">
+              <button class="context-nav-btn" id="prevParagraph">← Prev</button>
+              <button class="context-nav-btn" id="nextParagraph">Next →</button>
+            </div>
+            <button class="context-toggle hidden" id="contextToggle">Show Context</button>
+            <p class="live-wpm" id="liveWpm"></p>
+            <div class="auto-pace" id="autoPace">
+              <label class="auto-pace-toggle">
+                <input type="checkbox" id="autoPaceToggle" />
+                <span>Auto Pace</span>
+              </label>
+              <div class="auto-pace-settings" id="autoPaceSettings">
+                <div class="pace-field">
+                  <label>Start</label>
+                  <input type="number" id="startPace" value="150" min="60" max="900" step="10" />
+                </div>
+                <div class="pace-field">
+                  <label>Max</label>
+                  <input type="number" id="maxPace" value="400" min="60" max="900" step="10" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="reader-controls" id="readerControls">
+            <div class="controls-centered">
+              <button class="primary" data-action="start">Start</button>
+              <button data-action="pause">Pause</button>
+              <button data-action="reset">Restart</button>
+            </div>
+
+            <div class="reader-jump">
+              <button data-action="back10">-10</button>
+              <button data-action="rewind3">Rewind 3s</button>
+              <button data-action="forward10">+10</button>
+            </div>
+
+            <div class="speed-slider">
+              <span class="speed-label-min">120</span>
+              <div class="slider-track">
+                <input
+                  id="speedRange"
+                  type="range"
+                  min="120"
+                  max="900"
+                  value="300"
+                  step="10"
+                  aria-label="Reading speed"
+                />
+              </div>
+              <span class="speed-label-max">900</span>
+            </div>
+            <p class="wpm-display"><span id="wpmValue">300</span> WPM</p>
+          </div>
+        </section>
+
+        <section class="panel input-panel">
+          <div class="field">
+            <label for="docTitle">Document title</label>
+            <input
+              id="docTitle"
+              type="text"
+              placeholder="Give this document a name"
+            />
+          </div>
+
+          <label for="textInput">Paste your text or upload a PDF</label>
+          <textarea
+            id="textInput"
+            placeholder="Drop anything here — articles, notes, books."
+          ></textarea>
+
+          <div class="file-row">
+            <input id="pdfInput" type="file" accept="application/pdf" />
+            <label class="file-button" for="pdfInput">Upload PDF</label>
+            <p class="file-status" id="pdfStatus">No PDF loaded</p>
+          </div>
+
+          <div class="file-row">
+            <input id="epubInput" type="file" accept=".epub,application/epub+zip" />
+            <label class="file-button" for="epubInput">Upload EPUB</label>
+            <p class="file-status" id="epubStatus">No EPUB loaded</p>
+          </div>
+
+          <label class="toggle">
+            <input id="ocrToggle" type="checkbox" />
+            <span>OCR scanned PDFs (slower, but reads image-only pages)</span>
+          </label>
+
+          <div class="controls">
+            <button id="startBtn" class="primary" data-action="start">Start</button>
+            <button id="pauseBtn" data-action="pause">Pause</button>
+            <button id="resetBtn" data-action="reset">Reset</button>
+          </div>
+
+          <div class="hint">
+            Tip: <span>Space</span> start/pause · <span>R</span> reset · <span>← →</span> step · <span>Shift + ← →</span> jump 10 · <span>C</span> context
+          </div>
+
+          <div class="history">
+            <p class="history-title">Progress History</p>
+            <div class="history-row">
+              <span>Last read</span>
+              <span id="historyLastRead">—</span>
+            </div>
+            <div class="history-row">
+              <span>Sessions</span>
+              <span id="historySessions">0</span>
+            </div>
+            <div class="history-row">
+              <span>Time spent</span>
+              <span id="historyTime">0m</span>
+            </div>
+          </div>
+
+          <div class="library">
+            <div class="library-header">
+              <p class="library-title">Library</p>
+              <button id="clearLibraryBtn" class="ghost">Clear</button>
+            </div>
+            <p class="library-empty" id="libraryEmpty">No saved documents yet.</p>
+            <ul class="library-list" id="libraryList"></ul>
+          </div>
+
+          <div class="drop-overlay" id="dropOverlay">
+            Drop a PDF to load
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.88/dist/epub.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

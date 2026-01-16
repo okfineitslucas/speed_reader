@@ -1,0 +1,17 @@
+{
+  "name": "Focus Reader",
+  "short_name": "Focus Reader",
+  "description": "Reading comprehension trainer with focus-letter speed reading.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -23,7 +23,10 @@ body {
   background: var(--bg);
   display: flex;
   justify-content: center;
-  padding: 48px 24px 64px;
+  padding: calc(48px + env(safe-area-inset-top))
+    calc(24px + env(safe-area-inset-right))
+    calc(64px + env(safe-area-inset-bottom))
+    calc(24px + env(safe-area-inset-left));
 }
 
 .app {
@@ -32,6 +35,18 @@ body {
   flex-direction: column;
   gap: 32px;
   animation: rise 0.7s ease-out;
+}
+
+@supports (height: 100dvh) {
+  body {
+    min-height: 100dvh;
+  }
+}
+
+input,
+textarea,
+button {
+  font-size: 1rem;
 }
 
 .support-banner {
@@ -953,7 +968,10 @@ button.ghost {
 
 @media (max-width: 600px) {
   body {
-    padding: 32px 16px 48px;
+    padding: calc(32px + env(safe-area-inset-top))
+      calc(16px + env(safe-area-inset-right))
+      calc(48px + env(safe-area-inset-bottom))
+      calc(16px + env(safe-area-inset-left));
   }
 
   .controls {
